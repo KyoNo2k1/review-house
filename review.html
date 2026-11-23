@@ -1,0 +1,789 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <title>秋葉原 1K 3Dルームツアー｜株式会社IEKEY不動産</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #dde5ea;
+        --ink: #17212b;
+        --mute: #566673;
+        --acc: #1f5fbf;
+        --pan: rgba(250, 252, 253, 0.93);
+        --line: #bfcbd4;
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #0f161d;
+          --ink: #e8eef3;
+          --mute: #93a3b0;
+          --acc: #6aa5ff;
+          --pan: rgba(22, 31, 40, 0.93);
+          --line: #2c3a46;
+        }
+      }
+      :root[data-theme="dark"] {
+        --bg: #0f161d;
+        --ink: #e8eef3;
+        --mute: #93a3b0;
+        --acc: #6aa5ff;
+        --pan: rgba(22, 31, 40, 0.93);
+        --line: #2c3a46;
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--bg);
+        color: var(--ink);
+        font-family:
+          "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", Meiryo,
+          sans-serif;
+      }
+      canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+        cursor: grab;
+      }
+      canvas:active {
+        cursor: grabbing;
+      }
+      header {
+        position: absolute;
+        left: 16px;
+        top: calc(12px + env(safe-area-inset-top, 0px));
+        pointer-events: none;
+      }
+      header small {
+        color: var(--mute);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+      }
+      header h1 {
+        margin: 2px 0 0;
+        font-size: clamp(18px, 3.2vw, 26px);
+        font-weight: 700;
+        line-height: 1.3;
+      }
+      #lb button.hs {
+        position: absolute;
+        left: 0;
+        top: 0;
+        border: 1px solid var(--line);
+        background: var(--pan);
+        color: var(--ink);
+        border-radius: 999px;
+        padding: 5px 11px;
+        font: 500 12px inherit;
+        font-family: inherit;
+        cursor: pointer;
+        white-space: nowrap;
+        transition:
+          background 0.2s,
+          color 0.2s;
+      }
+      #lb button.hs:hover,
+      #lb button.hs.on {
+        background: var(--acc);
+        color: #fff;
+        border-color: var(--acc);
+      }
+      #lb span.sub {
+        position: absolute;
+        left: 0;
+        top: 0;
+        font-size: 11px;
+        color: var(--mute);
+        pointer-events: none;
+        white-space: nowrap;
+      }
+      #info {
+        position: absolute;
+        right: 16px;
+        top: calc(12px + env(safe-area-inset-top, 0px));
+        width: min(320px, calc(100% - 32px));
+        background: var(--pan);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 14px 16px;
+        backdrop-filter: blur(8px);
+      }
+      #info h2 {
+        margin: 0 0 2px;
+        font-size: 17px;
+      }
+      #info .ar {
+        color: var(--acc);
+        font-weight: 700;
+        font-size: 14px;
+      }
+      #info p {
+        margin: 8px 0 0;
+        font-size: 13px;
+        line-height: 1.7;
+      }
+      #info.pop {
+        animation: pop 0.35s ease;
+      }
+      @keyframes pop {
+        from {
+          transform: translateY(-6px);
+          opacity: 0.3;
+        }
+        to {
+          transform: none;
+          opacity: 1;
+        }
+      }
+      nav {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+        display: flex;
+        gap: 6px;
+        padding: 0 12px;
+        overflow-x: auto;
+        justify-content: safe center;
+      }
+      nav button,
+      #bk {
+        flex: none;
+        border: 1px solid var(--line);
+        background: var(--pan);
+        color: var(--ink);
+        border-radius: 8px;
+        padding: 9px 13px;
+        font: 500 13px inherit;
+        font-family: inherit;
+        cursor: pointer;
+      }
+      nav button.on {
+        background: var(--acc);
+        border-color: var(--acc);
+        color: #fff;
+      }
+      nav button:focus-visible,
+      #bk:focus-visible,
+      .hs:focus-visible {
+        outline: 2px solid var(--acc);
+        outline-offset: 2px;
+      }
+      #bk {
+        position: absolute;
+        left: 16px;
+        top: calc(76px + env(safe-area-inset-top, 0px));
+        background: var(--acc);
+        color: #fff;
+        border-color: var(--acc);
+      }
+      #hint {
+        position: absolute;
+        left: 16px;
+        bottom: calc(62px + env(safe-area-inset-bottom, 0px));
+        font-size: 11px;
+        color: var(--mute);
+      }
+      #sh {
+        position: absolute;
+        inset: 0;
+        background: rgba(10, 18, 26, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 12px;
+      }
+      #sh.open {
+        display: flex;
+      }
+      #sh .box {
+        background: var(--pan);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        width: min(640px, 100%);
+        max-height: 86%;
+        overflow: auto;
+        padding: 18px 20px;
+        backdrop-filter: blur(10px);
+      }
+      .tabs {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+      }
+      .tabs button {
+        border: 0;
+        background: none;
+        color: var(--mute);
+        font: 500 14px inherit;
+        font-family: inherit;
+        padding: 7px 10px;
+        border-bottom: 2px solid transparent;
+        cursor: pointer;
+      }
+      .tabs button.on {
+        color: var(--ink);
+        border-color: var(--acc);
+      }
+      dl {
+        margin: 0;
+        display: grid;
+        grid-template-columns: 9em 1fr;
+        gap: 0;
+      }
+      dt,
+      dd {
+        margin: 0;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 13.5px;
+        line-height: 1.6;
+      }
+      dt {
+        color: var(--mute);
+      }
+      .ct {
+        margin-top: 14px;
+        font-size: 12px;
+        color: var(--mute);
+      }
+      @media (max-width: 600px) {
+        #info {
+          top: auto;
+          bottom: calc(108px + env(safe-area-inset-bottom, 0px));
+          right: 12px;
+        }
+        #hint {
+          display: none;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #info.pop {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="c" aria-label="3Dルームビュー"></canvas>
+    <div id="lb"></div>
+    <header>
+      <small>株式会社IEKEY不動産</small>
+      <h1>秋葉原 1K｜3Dルームツアー</h1>
+    </header>
+    <button id="bk">物件情報・費用を見る</button>
+    <aside id="info" aria-live="polite"></aside>
+    <div id="hint">ドラッグで回転・ホイール/ピンチで拡大縮小</div>
+    <nav id="nav"></nav>
+    <div id="sh">
+      <div class="box">
+        <div class="tabs" id="tabs"></div>
+        <div id="tb"></div>
+        <div class="ct">
+          ※間取り図・写真をもとにした参考3Dです。面積・寸法は概算で、現況を優先します。<br /><button
+            id="cl"
+            style="
+              margin-top: 10px;
+              border: 1px solid var(--line);
+              background: none;
+              color: var(--ink);
+              border-radius: 8px;
+              padding: 8px 16px;
+              font-family: inherit;
+              cursor: pointer;
+            "
+          >
+            閉じる
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+      const T = THREE,
+        cv = document.getElementById("c");
+      const R = new T.WebGLRenderer({ canvas: cv, antialias: true });
+      R.setPixelRatio(Math.min(devicePixelRatio, 2));
+      const S = new T.Scene(),
+        cam = new T.PerspectiveCamera(45, 1, 0.1, 100);
+      const cssBg = () =>
+        getComputedStyle(document.documentElement)
+          .getPropertyValue("--bg")
+          .trim();
+      const setBg = () => {
+        S.background = new T.Color(cssBg());
+      };
+      setBg();
+      matchMedia("(prefers-color-scheme:dark)").addEventListener("change", () =>
+        setTimeout(setBg, 30),
+      );
+      S.add(new T.HemisphereLight(0xffffff, 0x9aa7b3, 0.85));
+      const dl = new T.DirectionalLight(0xffffff, 0.55);
+      dl.position.set(-4, 10, 8);
+      S.add(dl);
+      const walls = [];
+      function B(x0, y0, z0, x1, y1, z1, c, o) {
+        const m = new T.Mesh(
+          new T.BoxGeometry(x1 - x0, y1 - y0, z1 - z0),
+          new T.MeshLambertMaterial(Object.assign({ color: c }, o || {})),
+        );
+        m.position.set((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2);
+        S.add(m);
+        return m;
+      }
+      function W(x0, z0, x1, z1, nx, nz, y0 = 0, y1 = 2.4, fixed) {
+        const m = B(x0, y0, z0, x1, y1, z1, 0xf7f6f2, { transparent: true });
+        walls.push({
+          m,
+          nx,
+          nz,
+          fixed,
+          cx: (x0 + x1) / 2,
+          cz: (z0 + z1) / 2,
+          op: 1,
+        });
+        return m;
+      }
+      const WOOD = 0xdcb98a,
+        WH = 0xf3f2ee;
+      // floors
+      B(0, -0.06, 0, 4.2, 0, 2.8, WOOD);
+      B(4.2, -0.06, 0, 7.2, 0, 1.3, 0xe3c9a1);
+      B(7.2, -0.06, 0, 7.8, 0, 1.3, 0xaab0b5);
+      B(5, -0.06, 1.3, 6.7, 0, 2.8, 0xe8eef0);
+      B(6.7, -0.06, 1.3, 7.8, 0, 2.8, 0xe6dccb);
+      B(4.2, -0.06, 1.3, 5, 0, 2.8, WOOD);
+      B(-1.2, -0.06, 0, 0, 0, 2.8, 0xb4b8ba);
+      // exterior walls
+      W(-0.1, -0.1, 7.9, 0, 0, -1);
+      W(-0.1, 2.8, 7.9, 2.9, 0, 1);
+      W(7.8, 0, 7.9, 2.8, 1, 0);
+      W(-0.1, 0, 0, 0.25, -1, 0);
+      W(-0.1, 2.55, 0, 2.8, -1, 0);
+      W(-0.1, 0.25, 0, 2.55, -1, 0, 2.05, 2.4);
+      B(-0.04, 0, 0.25, 0, 2.05, 2.55, 0x9ccaf0, {
+        transparent: true,
+        opacity: 0.22,
+      });
+      B(-0.05, 0, 1.4, 0.02, 2.05, 1.45, 0x8a949c);
+      // partitions
+      const P = (a, b, c, d) => W(a, b, c, d, 0, 0, 0, 2.4, true);
+      P(4.15, 0, 4.25, 0.2);
+      P(4.15, 1, 4.25, 1.5);
+      P(4.2, 1.3, 7.8, 1.36);
+      P(5, 1.3, 5.06, 2.8);
+      P(6.7, 1.3, 6.76, 2.8);
+      // doors & closet
+      B(4.1, 0, 0.2, 4.14, 2, 1, 0xb7b1a8);
+      B(4.2, 0, 1.5, 4.26, 2.2, 2.15, 0xbfbab3);
+      B(4.2, 0, 2.15, 4.26, 2.2, 2.8, 0xbfbab3);
+      B(4.3, 1.75, 1.5, 5, 1.8, 2.8, 0x9a9a9a);
+      B(4.3, 0, 1.5, 5, 0.02, 2.8, 0xc9c4bd);
+      B(5.3, 0, 1.3, 6, 2, 1.36, 0xb7b1a8);
+      B(7, 0, 1.3, 7.5, 2, 1.36, 0xb7b1a8);
+      B(7.3, 0, 0, 7.8, 0, 0.01, 0x000000);
+      // kitchen
+      B(5.1, 0, 0.05, 6.5, 0.85, 0.6, 0xffffff);
+      B(5.1, 0.85, 0.05, 6.5, 0.9, 0.6, 0xc5ccd1);
+      B(5.9, 0.9, 0.12, 6.4, 0.92, 0.5, 0xaab3ba);
+      B(5.2, 0.9, 0.15, 5.4, 0.93, 0.35, 0x2a2f35);
+      B(5.2, 0.9, 0.38, 5.4, 0.93, 0.55, 0x2a2f35);
+      B(5.1, 1.55, 0.05, 6.5, 2.05, 0.38, 0xfafafa);
+      B(4.4, 0, 0.1, 5.1, 1.5, 0.75, 0x7aa7d8, {
+        transparent: true,
+        opacity: 0.28,
+      });
+      B(6.5, 0, 0.1, 7.2, 0.9, 0.7, 0x7aa7d8, {
+        transparent: true,
+        opacity: 0.28,
+      });
+      B(7.45, 0, 0.05, 7.78, 1.05, 0.35, 0xcfc7bb);
+      // aircon + sliding window frame
+      B(1, 2, 0.02, 1.9, 2.3, 0.3, 0xffffff);
+      // bath
+      B(5.1, 0, 1.9, 6.65, 0.55, 2.75, 0xffffff);
+      B(5.12, 0.45, 1.95, 6.6, 0.56, 2.7, 0xdfe8ec);
+      B(6.05, 0.8, 1.42, 6.6, 0.95, 1.85, 0xffffff);
+      B(6.65, 1.1, 1.5, 6.7, 1.75, 1.95, 0xbfd7e6);
+      B(5.05, 1.85, 1.35, 6.7, 1.9, 1.4, 0xb0b7bd);
+      // toilet
+      const tb = new T.Mesh(
+        new T.CylinderGeometry(0.19, 0.17, 0.38, 24),
+        new T.MeshLambertMaterial({ color: 0xffffff }),
+      );
+      tb.position.set(7.25, 0.19, 2.4);
+      tb.scale.z = 1.35;
+      S.add(tb);
+      B(7.1, 0.4, 2.62, 7.4, 0.85, 2.78, 0xffffff);
+      B(6.8, 1.55, 2.4, 7.75, 1.6, 2.78, 0xf0f0f0);
+      // balcony railing
+      B(-1.2, 0, -0.02, -1.16, 1.05, 2.82, 0xcfd5d9, {
+        transparent: true,
+        opacity: 0.6,
+      });
+      B(-1.2, 0, -0.02, 0, 1.05, 0.02, 0xcfd5d9, {
+        transparent: true,
+        opacity: 0.6,
+      });
+      B(-1.2, 0, 2.78, 0, 1.05, 2.82, 0xcfd5d9, {
+        transparent: true,
+        opacity: 0.6,
+      });
+      // zone highlight
+      const zone = new T.Mesh(
+        new T.PlaneGeometry(1, 1),
+        new T.MeshBasicMaterial({
+          color: 0x2f7bff,
+          transparent: true,
+          opacity: 0,
+          depthWrite: false,
+        }),
+      );
+      zone.rotation.x = -Math.PI / 2;
+      zone.position.y = 0.03;
+      S.add(zone);
+      const PL = {
+        all: {
+          n: "全体",
+          t: "秋葉原 1K（22.76㎡）",
+          a: "洋室7.3帖｜8階／14階建",
+          d: "3Dの間取りをドラッグで回転できます。手前の壁は自動で透過します。ボタンで各部屋へ移動します。",
+          v: [3.9, 0, 1.3, 13.5, 0.95, -0.3],
+        },
+        room: {
+          n: "洋室",
+          t: "洋室 7.3帖",
+          a: "約11.8㎡",
+          d: "フローリングの明るい洋室。エアコン付き。ベランダ側の掃き出し窓から光が入ります。",
+          v: [2.1, 0.8, 1.4, 5.2, 1.0, 1.15],
+          z: [0, 0, 4.2, 2.8],
+          p: [2.1, 0.1, 1.4],
+        },
+        kit: {
+          n: "キッチン",
+          t: "キッチン・廊下",
+          a: "約4.4㎡（概算）",
+          d: "IHの2口コンロとシンク。冷蔵庫置場と室内洗濯機置場が並びます。シューズケース付き。",
+          v: [6, 0.8, 0.6, 5, 0.9, 0.15],
+          z: [4.2, 0, 7.2, 1.3],
+          p: [5.8, 1.3, 0.5],
+        },
+        bath: {
+          n: "浴室",
+          t: "バス（洗面台付き）",
+          a: "約1.8㎡（概算）",
+          d: "浴室とトイレは別。バスルーム内に洗面台があります。",
+          v: [5.8, 0.5, 2.2, 3.5, 0.8, -0.3],
+          z: [5, 1.36, 6.7, 2.8],
+          p: [5.8, 0.9, 2.3],
+        },
+        toi: {
+          n: "トイレ",
+          t: "トイレ",
+          a: "約1.2㎡（概算）",
+          d: "独立したトイレ。上部に棚、横にタオルバーがあります。",
+          v: [7.25, 0.6, 2.2, 3, 0.8, 0.3],
+          z: [6.76, 1.36, 7.8, 2.8],
+          p: [7.25, 1, 2.2],
+        },
+        clo: {
+          n: "クローゼット",
+          t: "クローゼット",
+          a: "約1.0㎡（概算）",
+          d: "洋室の壁面にある折れ戸のクローゼット。ハンガーパイプ付き。",
+          v: [4.6, 1, 2.1, 3.6, 1.1, -1.2],
+          z: [4.3, 1.5, 5, 2.8],
+          p: [4.6, 1.1, 2.2],
+        },
+        bal: {
+          n: "ベランダ",
+          t: "ベランダ",
+          a: "約3.4㎡（概算）",
+          d: "洋室に面した南向き想定のベランダ。眺めとお洗濯に。",
+          v: [-0.6, 0.6, 1.4, 4.3, 1.0, -1],
+          z: [-1.2, 0, 0, 2.8],
+          p: [-0.6, 0.5, 1.4],
+        },
+        gen: {
+          n: "玄関",
+          t: "玄関",
+          a: "約0.7㎡（概算）",
+          d: "オートロック・TVインターホン付き。玄関横にシューズケースがあります。",
+          v: [7.5, 0.7, 0.7, 3.3, 0.9, 0.45],
+          z: [7.2, 0, 7.8, 1.3],
+          p: [7.5, 0.3, 0.7],
+        },
+      };
+      const subs = [
+        ["冷蔵庫置場", 4.75, 1.6, 0.45],
+        ["洗濯機置場", 6.85, 1, 0.4],
+        ["シューズケース", 7.6, 1.1, 0.2],
+      ];
+      const lb = document.getElementById("lb"),
+        nav = document.getElementById("nav"),
+        info = document.getElementById("info");
+      const hs = {},
+        nb = {};
+      for (const k in PL) {
+        const p = PL[k];
+        const b = document.createElement("button");
+        b.textContent = p.n;
+        b.onclick = () => go(k, true);
+        nav.appendChild(b);
+        nb[k] = b;
+        if (p.p) {
+          const h = document.createElement("button");
+          h.className = "hs";
+          h.textContent = p.n;
+          h.onclick = () => go(k, true);
+          lb.appendChild(h);
+          hs[k] = h;
+        }
+      }
+      const sp = subs.map((s) => {
+        const e = document.createElement("span");
+        e.className = "sub";
+        e.textContent = s[0];
+        lb.appendChild(e);
+        return e;
+      });
+      const cur = { x: 3.9, y: 0, z: 1.3, r: 16, p: 1.1, t: -1.2 },
+        g = { ...cur, r: 13.5, p: 0.95, t: -0.3 };
+      let place = "all",
+        idle = true,
+        tour = null;
+      function go(k, user) {
+        const p = PL[k];
+        place = k;
+        const v = p.v;
+        Object.assign(g, {
+          x: v[0],
+          y: v[1],
+          z: v[2],
+          r: v[3],
+          p: v[4],
+          t: v[5],
+        });
+        if (user) {
+          stopTour();
+          idle = false;
+        }
+        for (const q in nb) nb[q].classList.toggle("on", q === k);
+        for (const q in hs) hs[q].classList.toggle("on", q === k);
+        info.innerHTML = `<h2>${p.t}</h2><div class="ar">${p.a}</div><p>${p.d}</p>`;
+        info.classList.remove("pop");
+        void info.offsetWidth;
+        info.classList.add("pop");
+        const z = p.z;
+        if (z) {
+          zone.scale.set(z[2] - z[0], z[3] - z[1], 1);
+          zone.position.set((z[0] + z[2]) / 2, 0.03, (z[1] + z[3]) / 2);
+          zone.userData.on = 1;
+        } else zone.userData.on = 0;
+      }
+      function stopTour() {
+        if (tour) {
+          clearInterval(tour);
+          tour = null;
+        }
+      }
+      // tour button
+      const tb2 = document.createElement("button");
+      tb2.textContent = "自動ツアー";
+      tb2.onclick = () => {
+        if (tour) {
+          stopTour();
+          return;
+        }
+        const ks = Object.keys(PL);
+        let i = 0;
+        go(ks[0]);
+        tour = setInterval(() => {
+          i = (i + 1) % ks.length;
+          go(ks[i]);
+        }, 4500);
+      };
+      nav.prepend(tb2);
+      // input
+      let dr = null,
+        pts = {};
+      cv.addEventListener("pointerdown", (e) => {
+        cv.setPointerCapture(e.pointerId);
+        pts[e.pointerId] = [e.clientX, e.clientY];
+        dr = [e.clientX, e.clientY];
+        idle = false;
+      });
+      cv.addEventListener("pointermove", (e) => {
+        if (!pts[e.pointerId]) return;
+        const ks = Object.keys(pts);
+        if (ks.length === 2) {
+          const o = ks.find((k) => k != e.pointerId),
+            a = pts[o],
+            b = pts[e.pointerId],
+            d0 = Math.hypot(a[0] - b[0], a[1] - b[1]);
+          pts[e.pointerId] = [e.clientX, e.clientY];
+          const d1 = Math.hypot(a[0] - e.clientX, a[1] - e.clientY);
+          g.r = Math.min(22, Math.max(2, (g.r * d0) / Math.max(d1, 1)));
+          return;
+        }
+        const p = pts[e.pointerId];
+        g.t -= (e.clientX - p[0]) * 0.006;
+        g.p = Math.min(1.5, Math.max(0.15, g.p - (e.clientY - p[1]) * 0.005));
+        pts[e.pointerId] = [e.clientX, e.clientY];
+      });
+      const up = (e) => {
+        delete pts[e.pointerId];
+      };
+      cv.addEventListener("pointerup", up);
+      cv.addEventListener("pointercancel", up);
+      cv.addEventListener(
+        "wheel",
+        (e) => {
+          e.preventDefault();
+          g.r = Math.min(22, Math.max(2, g.r * (1 + e.deltaY * 0.001)));
+          idle = false;
+        },
+        { passive: false },
+      );
+      function rs() {
+        const w = innerWidth,
+          h = innerHeight;
+        R.setSize(w, h, false);
+        cam.aspect = w / h;
+        cam.updateProjectionMatrix();
+      }
+      addEventListener("resize", rs);
+      rs();
+      const v3 = new T.Vector3(),
+        reduce = matchMedia("(prefers-reduced-motion:reduce)").matches;
+      function place2(el, x, y, z) {
+        v3.set(x, y, z).project(cam);
+        const ok = v3.z < 1;
+        el.style.display = ok ? "" : "none";
+        el.style.transform = `translate(${(v3.x * 0.5 + 0.5) * innerWidth}px,${(-v3.y * 0.5 + 0.5) * innerHeight}px) translate(-50%,-50%)`;
+      }
+      const k = reduce ? 1 : 0.07;
+      function loop(t) {
+        requestAnimationFrame(loop);
+        if (idle && place === "all" && !reduce) g.t += 0.0014;
+        for (const q of ["x", "y", "z", "r", "p", "t"])
+          cur[q] += (g[q] - cur[q]) * k;
+        cam.position.set(
+          cur.x + cur.r * Math.sin(cur.p) * Math.sin(cur.t),
+          cur.y + cur.r * Math.cos(cur.p),
+          cur.z + cur.r * Math.sin(cur.p) * Math.cos(cur.t),
+        );
+        cam.lookAt(cur.x, cur.y, cur.z);
+        for (const w of walls) {
+          const m = w.m.material;
+          let tgt = 1;
+          if (w.fixed) tgt = 0.42;
+          else if (
+            w.nx * (cam.position.x - w.cx) + w.nz * (cam.position.z - w.cz) >
+            0
+          )
+            tgt = 0.05;
+          w.op += (tgt - w.op) * 0.15;
+          m.opacity = w.op;
+          m.depthWrite = w.op > 0.9;
+        }
+        zone.material.opacity = zone.userData.on
+          ? 0.22 + 0.12 * Math.sin(t * 0.004)
+          : 0;
+        for (const q in hs) place2(hs[q], ...PL[q].p);
+        subs.forEach((s, i) => place2(sp[i], s[1], s[2], s[3]));
+        R.render(S, cam);
+      }
+      // sheet
+      const D = {
+        物件情報: [
+          ["住所", "東京都台東区秋葉原"],
+          ["建物種別", "マンション"],
+          ["間取り", "1K／洋室7.3帖"],
+          ["専有面積", "22.76㎡"],
+          ["階数", "8階／14階建"],
+          ["構造", "鉄骨鉄筋造"],
+          ["築年月", "2005年3月"],
+          [
+            "設備",
+            "エアコン・IHコンロ（2口）・クローゼット・フローリング・ベランダ・室内洗濯機置場",
+          ],
+          ["バス・トイレ", "バス・トイレ別／独立洗面台あり"],
+          ["セキュリティ", "オートロック・防犯カメラ・TVインターホン"],
+        ],
+        費用: [
+          ["賃料", "73,000円"],
+          ["管理費", "10,000円"],
+          ["月額合計", "83,000円"],
+          ["敷金／礼金", "73,000円／0円"],
+          [
+            "初期費用",
+            "約113,400円（室内消毒費・24時間サポート・入館料・町内会費・鍵交換費）",
+          ],
+          ["保証会社初回料", "40,000円"],
+          ["仲介手数料", "賃料の1.1ヶ月分"],
+          ["入居時の目安", "約31〜32万円"],
+        ],
+        "交通・周辺": [
+          ["秋葉原駅", "徒歩5分"],
+          ["末広町駅", "徒歩6分"],
+          ["岩本町駅", "徒歩11分"],
+          ["コンビニ", "ローソン、セブンイレブン"],
+          ["スーパー", "まいばすけっと、肉のハナマサ"],
+          ["ドラッグストア", "マツモトキヨシ"],
+        ],
+        契約条件: [
+          ["契約形態", "普通借家契約（1年）"],
+          ["入居予定", "2026年12月上旬"],
+          ["保証", "保証会社の利用が必要"],
+          ["取扱会社", "株式会社IEKEY不動産"],
+        ],
+      };
+      const tabs = document.getElementById("tabs"),
+        tbd = document.getElementById("tb");
+      function show(n) {
+        [...tabs.children].forEach((b) =>
+          b.classList.toggle("on", b.textContent === n),
+        );
+        tbd.innerHTML =
+          "<dl>" +
+          D[n].map((r) => `<dt>${r[0]}</dt><dd>${r[1]}</dd>`).join("") +
+          "</dl>";
+      }
+      Object.keys(D).forEach((n) => {
+        const b = document.createElement("button");
+        b.textContent = n;
+        b.onclick = () => show(n);
+        tabs.appendChild(b);
+      });
+      show("物件情報");
+      const sh = document.getElementById("sh");
+      document.getElementById("bk").onclick = () => sh.classList.add("open");
+      document.getElementById("cl").onclick = () => sh.classList.remove("open");
+      sh.onclick = (e) => {
+        if (e.target === sh) sh.classList.remove("open");
+      };
+      addEventListener("keydown", (e) => {
+        if (e.key === "Escape") sh.classList.remove("open");
+      });
+      go("all");
+      requestAnimationFrame(loop);
+    </script>
+  </body>
+</html>

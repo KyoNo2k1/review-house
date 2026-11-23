@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <title>秋葉原 1K 賃貸物件のご案内｜株式会社IEKEY不動産</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #eef2f5;
+        --sf: #fff;
+        --ink: #16202a;
+        --mute: #5a6a77;
+        --acc: #1f5fbf;
+        --acc2: #e8f0fc;
+        --line: #d3dce3;
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #0e151b;
+          --sf: #161f28;
+          --ink: #e8eef3;
+          --mute: #93a3b0;
+          --acc: #6aa5ff;
+          --acc2: #1b2a3d;
+          --line: #2a3743;
+        }
+      }
+      :root[data-theme="dark"] {
+        --bg: #0e151b;
+        --sf: #161f28;
+        --ink: #e8eef3;
+        --mute: #93a3b0;
+        --acc: #6aa5ff;
+        --acc2: #1b2a3d;
+        --line: #2a3743;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 60px;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family:
+          "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", Meiryo,
+          sans-serif;
+        line-height: 1.8;
+        font-size: 15px;
+      }
+      .w {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+      #top {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        background: var(--sf);
+        border-bottom: 1px solid var(--line);
+      }
+      #top .w {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        height: 52px;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      #top b {
+        font-weight: 700;
+        margin-right: auto;
+      }
+      #top a {
+        color: var(--mute);
+        text-decoration: none;
+        font-size: 13px;
+      }
+      #top a:hover {
+        color: var(--acc);
+      }
+      .btn {
+        display: inline-block;
+        background: var(--acc);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 700;
+        padding: 12px 22px;
+        border-radius: 8px;
+      }
+      .btn.o {
+        background: none;
+        color: var(--acc);
+        border: 1.5px solid var(--acc);
+      }
+      .btn:focus-visible,
+      a:focus-visible {
+        outline: 2px solid var(--acc);
+        outline-offset: 3px;
+      }
+      .hero {
+        padding: 44px 0 28px;
+      }
+      .hero h1 {
+        margin: 0;
+        font-size: clamp(30px, 6vw, 52px);
+        font-weight: 900;
+        line-height: 1.25;
+        letter-spacing: 0.01em;
+      }
+      .hero p {
+        margin: 14px 0 22px;
+        color: var(--mute);
+        max-width: 34em;
+      }
+      .hero .row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .plan {
+        margin-top: 30px;
+        background: var(--sf);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 14px;
+      }
+      .plan svg {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      .plan .t {
+        fill: var(--ink);
+        font:
+          500 9px "Zen Kaku Gothic New",
+          sans-serif;
+      }
+      .plan .r {
+        fill: var(--acc2);
+        stroke: var(--ink);
+        stroke-width: 1.5;
+      }
+      .plan .s {
+        fill: var(--sf);
+        stroke: var(--ink);
+        stroke-width: 1.2;
+      }
+      .plan small {
+        display: block;
+        color: var(--mute);
+        font-size: 12px;
+        margin-top: 6px;
+      }
+      .facts {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 1px;
+        background: var(--line);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        overflow: hidden;
+        margin: 26px 0 0;
+      }
+      .facts div {
+        background: var(--sf);
+        padding: 14px 16px;
+      }
+      .facts span {
+        display: block;
+        font-size: 12px;
+        color: var(--mute);
+      }
+      .facts b {
+        font-size: 19px;
+      }
+      section {
+        padding: 46px 0 0;
+      }
+      h2 {
+        margin: 0 0 16px;
+        font-size: 22px;
+        font-weight: 700;
+      }
+      h2::before {
+        content: "";
+        display: inline-block;
+        width: 6px;
+        height: 1em;
+        background: var(--acc);
+        margin-right: 10px;
+        vertical-align: -0.12em;
+        border-radius: 2px;
+      }
+      .card {
+        background: var(--sf);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 6px 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 11px 0;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        font-size: 14.5px;
+        vertical-align: top;
+      }
+      tr:last-child th,
+      tr:last-child td {
+        border: 0;
+      }
+      th {
+        width: 9em;
+        color: var(--mute);
+        font-weight: 500;
+      }
+      td.n {
+        text-align: right;
+        white-space: nowrap;
+        font-weight: 700;
+      }
+      .tot td,
+      .tot th {
+        font-weight: 700;
+        color: var(--acc);
+      }
+      .g2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      @media (max-width: 700px) {
+        .g2 {
+          grid-template-columns: 1fr;
+        }
+      }
+      .walk {
+        display: grid;
+        grid-template-columns: 7em 1fr 4em;
+        gap: 10px;
+        align-items: center;
+        padding: 9px 0;
+      }
+      .walk i {
+        display: block;
+        height: 8px;
+        background: var(--acc);
+        border-radius: 4px;
+      }
+      .walk em {
+        font-style: normal;
+        text-align: right;
+        font-weight: 700;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .chips span {
+        background: var(--acc2);
+        color: var(--ink);
+        border-radius: 999px;
+        padding: 6px 14px;
+        font-size: 13.5px;
+      }
+      ul.l {
+        margin: 0;
+        padding: 6px 0 6px 1.2em;
+      }
+      ul.l li {
+        padding: 2px 0;
+      }
+      .cta {
+        margin: 46px 0 0;
+        background: var(--acc);
+        color: #fff;
+        border-radius: 14px;
+        padding: 28px;
+        display: flex;
+        gap: 18px;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .cta h2 {
+        color: #fff;
+        margin: 0 0 4px;
+      }
+      .cta h2::before {
+        display: none;
+      }
+      .cta p {
+        margin: 0;
+        opacity: 0.9;
+      }
+      .cta .btn {
+        background: #fff;
+        color: #1f4f9f;
+      }
+      footer {
+        padding: 30px 0 40px;
+        color: var(--mute);
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="top">
+      <div class="w">
+        <b>株式会社IEKEY不動産</b><a href="#info">物件概要</a
+        ><a href="#cost">費用</a><a href="#access">アクセス</a
+        ><a href="#equip">設備</a><a href="#contract">契約条件</a>
+      </div>
+    </div>
+
+    <div class="w">
+      <div class="hero">
+        <h1>秋葉原駅、徒歩5分。<br />8階の1Kで始める東京暮らし。</h1>
+        <p>
+          2005年築の鉄骨鉄筋コンクリート造マンション。バス・トイレ別、オートロック付き。2026年12月上旬から入居できます。
+        </p>
+        <div class="row">
+          <a class="btn" href="review.html" id="review">3Dで室内を見る</a
+          ><a class="btn o" href="#contact">内見・お問い合わせ</a>
+        </div>
+        <div class="plan" aria-label="間取り図（概略）">
+          <svg viewBox="0 0 370 130" role="img" aria-label="1Kの間取り概略図">
+            <rect class="s" x="2" y="6" width="44" height="112" />
+            <text class="t" x="24" y="64" text-anchor="middle">ベランダ</text>
+            <rect class="r" x="48" y="6" width="168" height="112" />
+            <text
+              class="t"
+              x="132"
+              y="58"
+              text-anchor="middle"
+              style="font-size: 13px"
+            >
+              洋室 7.3帖
+            </text>
+            <text class="t" x="132" y="74" text-anchor="middle">約11.8㎡</text>
+            <rect class="s" x="216" y="6" width="152" height="48" />
+            <text class="t" x="292" y="22" text-anchor="middle">
+              キッチン・廊下
+            </text>
+            <rect
+              class="s"
+              x="228"
+              y="28"
+              width="28"
+              height="22"
+              style="stroke-dasharray: 3 2"
+            />
+            <text
+              class="t"
+              x="242"
+              y="62"
+              text-anchor="middle"
+              style="font-size: 7px"
+            >
+              冷蔵庫
+            </text>
+            <rect
+              class="s"
+              x="316"
+              y="28"
+              width="28"
+              height="22"
+              style="stroke-dasharray: 3 2"
+            />
+            <text
+              class="t"
+              x="330"
+              y="62"
+              text-anchor="middle"
+              style="font-size: 7px"
+            >
+              洗濯機
+            </text>
+            <rect
+              class="s"
+              x="344"
+              y="6"
+              width="24"
+              height="48"
+              style="fill: var(--line)"
+            />
+            <text
+              class="t"
+              x="356"
+              y="34"
+              text-anchor="middle"
+              style="font-size: 8px"
+            >
+              玄関
+            </text>
+            <rect class="s" x="216" y="58" width="36" height="60" />
+            <text
+              class="t"
+              x="234"
+              y="92"
+              text-anchor="middle"
+              style="font-size: 8px"
+            >
+              収納
+            </text>
+            <rect class="s" x="252" y="58" width="68" height="60" />
+            <text class="t" x="286" y="92" text-anchor="middle">浴室</text>
+            <rect class="s" x="320" y="58" width="48" height="60" />
+            <text class="t" x="344" y="92" text-anchor="middle">トイレ</text>
+          </svg>
+          <small
+            >※間取り図をもとにした概略図です。実際の寸法・配置と異なる場合があります。</small
+          >
+        </div>
+        <div class="facts">
+          <div><span>賃料</span><b>73,000円</b></div>
+          <div><span>管理費</span><b>10,000円</b></div>
+          <div><span>専有面積</span><b>22.76㎡</b></div>
+          <div><span>階数</span><b>8階／14階建</b></div>
+          <div><span>築年月</span><b>2005年3月</b></div>
+        </div>
+      </div>
+
+      <section id="info">
+        <h2>物件概要</h2>
+        <div class="card">
+          <table>
+            <tr>
+              <th>所在地</th>
+              <td>東京都台東区秋葉原</td>
+            </tr>
+            <tr>
+              <th>建物種別</th>
+              <td>マンション（鉄骨鉄筋造）</td>
+            </tr>
+            <tr>
+              <th>間取り</th>
+              <td>1K／洋室7.3帖</td>
+            </tr>
+            <tr>
+              <th>専有面積</th>
+              <td>22.76㎡</td>
+            </tr>
+            <tr>
+              <th>階数</th>
+              <td>8階／14階建</td>
+            </tr>
+            <tr>
+              <th>築年月</th>
+              <td>2005年3月</td>
+            </tr>
+            <tr>
+              <th>入居可能日</th>
+              <td>2026年12月上旬</td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <section id="cost">
+        <h2>家賃・初期費用</h2>
+        <div class="g2">
+          <div class="card">
+            <table>
+              <tr>
+                <th>賃料</th>
+                <td class="n">73,000円</td>
+              </tr>
+              <tr>
+                <th>管理費</th>
+                <td class="n">10,000円</td>
+              </tr>
+              <tr class="tot">
+                <th>月額合計</th>
+                <td class="n">83,000円</td>
+              </tr>
+            </table>
+          </div>
+          <div class="card">
+            <table>
+              <tr>
+                <th>敷金</th>
+                <td class="n">73,000円</td>
+              </tr>
+              <tr>
+                <th>礼金</th>
+                <td class="n">0円</td>
+              </tr>
+              <tr>
+                <th>初期費用</th>
+                <td class="n">約113,400円</td>
+              </tr>
+              <tr>
+                <th>保証会社初回料</th>
+                <td class="n">40,000円</td>
+              </tr>
+              <tr>
+                <th>仲介手数料</th>
+                <td class="n">家賃1.1ヶ月分</td>
+              </tr>
+              <tr class="tot">
+                <th>入居時の目安</th>
+                <td class="n">約31〜32万円</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <p style="color: var(--mute); font-size: 13px; margin: 10px 0 0">
+          初期費用には室内消毒費・24時間サポート・入館料・町内会費・鍵交換費が含まれます。日割り家賃などにより金額は変わる場合があります。
+        </p>
+      </section>
+
+      <section id="access">
+        <h2>交通アクセス</h2>
+        <div class="card" style="padding: 10px 20px">
+          <div class="walk">
+            <span>秋葉原駅</span><i style="width: 45%"></i><em>徒歩5分</em>
+          </div>
+          <div class="walk">
+            <span>末広町駅</span><i style="width: 55%"></i><em>徒歩6分</em>
+          </div>
+          <div class="walk">
+            <span>岩本町駅</span><i style="width: 100%"></i><em>徒歩11分</em>
+          </div>
+        </div>
+        <div class="g2" style="margin-top: 16px">
+          <div class="card">
+            <table>
+              <tr>
+                <th>コンビニ</th>
+                <td>ローソン、セブンイレブン</td>
+              </tr>
+              <tr>
+                <th>スーパー</th>
+                <td>まいばすけっと、肉のハナマサ</td>
+              </tr>
+              <tr>
+                <th>ドラッグストア</th>
+                <td>マツモトキヨシ</td>
+              </tr>
+            </table>
+          </div>
+          <div class="card" style="display: flex; align-items: center">
+            <p style="margin: 12px 0">
+              買い物に便利な環境です。毎日の食料品から日用品まで、徒歩圏内でそろいます。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="equip">
+        <h2>設備・セキュリティ</h2>
+        <div class="g2">
+          <div class="card" style="padding: 16px 20px">
+            <b>室内設備</b>
+            <div class="chips" style="margin-top: 10px">
+              <span>エアコン</span><span>IHコンロ（2口）</span
+              ><span>クローゼット</span><span>フローリング</span
+              ><span>ベランダ</span><span>室内洗濯機置場</span
+              ><span>バス・トイレ別</span><span>独立洗面台</span>
+            </div>
+          </div>
+          <div class="card" style="padding: 16px 20px">
+            <b>セキュリティ</b>
+            <div class="chips" style="margin-top: 10px">
+              <span>オートロック</span><span>防犯カメラ</span
+              ><span>TVインターホン</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contract">
+        <h2>契約条件</h2>
+        <div class="card">
+          <table>
+            <tr>
+              <th>契約形態</th>
+              <td>普通借家契約（1年）</td>
+            </tr>
+            <tr>
+              <th>保証</th>
+              <td>保証会社の利用が必要です</td>
+            </tr>
+            <tr>
+              <th>入居予定</th>
+              <td>2026年12月上旬</td>
+            </tr>
+            <tr>
+              <th>仲介手数料</th>
+              <td>賃料の1.1ヶ月分</td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+      <div class="cta" id="contact">
+        <div>
+          <h2>内見をご希望の方へ</h2>
+          <p>お問い合わせは株式会社IEKEY不動産までお気軽にどうぞ。</p>
+        </div>
+        <a class="btn" href="review.html">まず3Dで見る</a>
+      </div>
+      <footer>
+        株式会社IEKEY不動産｜掲載内容は変更になる場合があります。最新の状況はお問い合わせください。
+      </footer>
+    </div>
+  </body>
+</html>
